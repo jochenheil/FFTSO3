@@ -50,11 +50,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 ## BUILD FFTSO3 LIBRARY
 set(FFTSO3_src
     src/fdcl_FFTSO3.cpp
-    src/fdcl_FFTS2.cpp
     src/fdcl_Clebsch_Gordon.cpp
     src/fdcl_tictoc.cpp
     src/fdcl_FFTSO3_matrix.cpp
-    src/fdcl_FFTS2_matrix.cpp
     src/misc_matrix_func.cpp
     src/fdcl_omp_thread.cpp)
 
@@ -73,9 +71,6 @@ target_link_libraries(example1 fftso3)
 
 add_executable(example2 example/example2.cpp)
 target_link_libraries(example2 fftso3)
-
-add_executable(example3 example/example3.cpp)
-target_link_libraries(example3 fftso3)
 
 add_executable(example4 example/example4.cpp)
 target_link_libraries(example4 fftso3)
