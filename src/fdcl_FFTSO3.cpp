@@ -10,7 +10,6 @@ void fdcl::FFTSO3_complex::init(int l_max)
     this->l_max=l_max;  
     this->B=l_max+1;
     d_beta.resize(2*B);
-    weight.resize(2*B);
 }
 
 fdcl::FFTSO3_matrix_real fdcl::FFTSO3_complex::wigner_d_explicit(double beta)
@@ -233,26 +232,22 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::wigner_D(Eigen::Matrix3d R)
     return wigner_D(abg[0],abg[1],abg[2]);      
 }
 
-std::vector<double> fdcl::FFTSO3_complex::compute_weight()
-{   
+std::vector<double> fdcl::FFTSO3_complex::compute_weights() {
     int j, k;
     double factor;
     double sum;
+    std::vector<double> weights(2*B, 0.);
 
     factor = M_PI/((double)(4*B)) ;
 
-    for(j=0;j<2*B;j++)
-    {
-        sum=0.0;
-        for(k=0;k<B;k++)
-            sum+=1./((double)(2*k+1))*sin((double)((2*j+1)*(2*k+1))*factor);
-        
-        sum*=1./((double)4*B*B*B)*sin((double)(2*j+1)*factor);
-      
-        weight[j]=sum;
+    for(j = 0; j < 2*B; j++) {
+        sum = 0.0;
+        for(k=0;k<B;k++) { sum += 1./((double)(2*k+1))*sin((double)((2*j+1)*(2*k+1))*factor); }
+        sum *= 1./((double)4*B*B*B)*sin((double)(2*j+1)*factor);
+        weights[j] = sum;
     }
-    
-    return weight;
+
+    return weights;
 }
 
 double fdcl::FFTSO3_complex::check_weight()
@@ -294,8 +289,8 @@ double fdcl::FFTSO3_complex::check_weight()
         for(j1=0;j1<2*B;j1++)
             for(j2=0;j2<2*B;j2++)
                 for(l=0;l<2*B;l++)
-                    Delta[l]+=weight[k]*wigner_D(alpha_j(j1),beta_k(k),gamma_j(j2),2*B-1)[l];
-    
+                    Delta[l]+=weights[k]*wigner_D(alpha_j(j1),beta_k(k),gamma_j(j2),2*B-1)[l];
+
     if(check_verbose)
     {
         cout << "\\sum_{j1,k,j2} w_k D(alpha_j1, beta_k, gamma_j2) = \\delta_{l,0}\\delta_{m,0}\\delta_{n,0}" << endl;
@@ -617,8 +612,8 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform_0(std::funct
     
     complex<double> exp_imalpha, exp_ingamma, f_j1kj2;
     double alpha, beta, gamma;
-    compute_weight();
-    
+    std::vector<double> weights = this->compute_weights();
+
     F.setZero();
    
     for(k=0;k<2*B;k++)  
@@ -640,14 +635,14 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform_0(std::funct
                         for(n=-l;n<=l;n++)
                         {
                             exp_ingamma=exp(I*((double)n)*gamma);
-                            F(l,m,n)+=weight[k]*exp_imalpha*f_j1kj2*exp_ingamma*d_beta_k(l,m,n);
+                            F(l,m,n)+=weights[k]*exp_imalpha*f_j1kj2*exp_ingamma*d_beta_k(l,m,n);
                         }
                     }
                 }
             }
         }
     }
-        
+
     return F;
 }
 
@@ -660,7 +655,7 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform(std::functio
 {
     fdcl::FFTSO3_matrix_complex F(l_max);
 	F.setZero();
-	compute_weight();
+    std::vector<double> weights = this->compute_weights();
 
 #pragma omp parallel 
     {
@@ -707,17 +702,17 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform(std::functio
                 {
                     for(m=1; m<=l; m++)
                     {
-                        for(n=1; n<=l; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(2*B-m,2*B-n);
-                        for(n=-l; n<=0; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(2*B-m,-n);
+                        for(n=1; n<=l; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(2*B-m,2*B-n);
+                        for(n=-l; n<=0; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(2*B-m,-n);
                     }
                     for(m=-l; m<=0; m++)
                     {
-                        for(n=1; n<=l; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(-m,2*B-n);
-                        for(n=-l; n<=0; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(-m,-n);
+                        for(n=1; n<=l; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(-m,2*B-n);
+                        for(n=-l; n<=0; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(-m,-n);
                     }
                 }
             }
@@ -727,15 +722,15 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform(std::functio
                 {
                     for(m=1; m<=l; m++)
                     {
-                        for(n=1; n<=l; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(2*B-m,2*B-n);
-                        for(n=-l; n<=0; n++)	
-                            F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(2*B-m,-n);
+                        for(n=1; n<=l; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(2*B-m,2*B-n);
+                        for(n=-l; n<=0; n++)
+                            F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(2*B-m,-n);
                     }
                     m=0;
-                    for(n=-l; n<=0; n++)	
-                        F_local(l,m,n)+=weight[k]*d_beta_k(l,m,n)*F_k(-m,-n);
-                    
+                    for(n=-l; n<=0; n++)
+                        F_local(l,m,n)+=weights[k]*d_beta_k(l,m,n)*F_k(-m,-n);
+
                 }
             }
 #pragma omp critical
@@ -775,7 +770,7 @@ fdcl::FFTSO3_matrix_real fdcl::FFTSO3_real::forward_transform(std::function <dou
 {
     fdcl::FFTSO3_matrix_real F(l_max);
     F.setZero();
-    compute_weight();
+    std::vector<double> weights = this->compute_weights();
 
 #pragma omp parallel 
     {
@@ -833,9 +828,9 @@ fdcl::FFTSO3_matrix_real fdcl::FFTSO3_real::forward_transform(std::function <dou
                         double cos_ma_sin_ng = 0.5*(sin_mang - sin_ma_ng);
 
                         if ( (m>=0 && n>=0) || (m<0 && n<0) )
-                            F_local(l,m,n)+=weight[k]*(-sin_ma_sin_ng*Psi(l,-m,n)+cos_ma_cos_ng*Psi(l,m,n));
+                            F_local(l,m,n)+=weights[k]*(-sin_ma_sin_ng*Psi(l,-m,n)+cos_ma_cos_ng*Psi(l,m,n));
                         else
-                            F_local(l,m,n)+=weight[k]*(-sin_ma_cos_ng*Psi(l,-m,n)+cos_ma_sin_ng*Psi(l,m,n));
+                            F_local(l,m,n)+=weights[k]*(-sin_ma_cos_ng*Psi(l,-m,n)+cos_ma_sin_ng*Psi(l,m,n));
 
                     }
                 }
@@ -858,12 +853,12 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform_1(std::funct
     fdcl::FFTSO3_matrix_real d_beta_k(l_max);
     fdcl::FFTSO3_matrix_complex F_gamma[2*B];
     fdcl::FFTSO3_matrix_complex F(l_max);
-    
+
     complex<double> f_j1kj2;
     double alpha, beta, gamma;
-    
-    compute_weight();
-    
+
+    std::vector<double> weights = this->compute_weights();
+
     for(j1=0;j1<2*B;j1++)
     {
         for(j2=0;j2<2*B;j2++)
@@ -883,7 +878,7 @@ fdcl::FFTSO3_matrix_complex fdcl::FFTSO3_complex::forward_transform_1(std::funct
             for(j2=0;j2<2*B;j2++)
             {
                 f_j1kj2=func(alpha,beta,gamma_j(j2));
-                F_beta[j1][j2]=F_beta[j1][j2]+d_beta_k*(weight[k]*f_j1kj2); 
+                F_beta[j1][j2]=F_beta[j1][j2]+d_beta_k*(weights[k]*f_j1kj2);
             }
         }
     }   
@@ -1189,7 +1184,7 @@ fdcl::FFTSO3_matrix_real fdcl::FFTSO3_real::forward_transform_1(std::function <d
     double f_j1kj2, alpha, beta, gamma;
 
     Phi.resize(2);
-    compute_weight();
+    std::vector<double> weights = this->compute_weights();
 
     for(j1=0;j1<2*B;j1++)
     {
@@ -1262,7 +1257,7 @@ fdcl::FFTSO3_matrix_real fdcl::FFTSO3_real::forward_transform_0(std::function <d
     double f_j1kj2, alpha, beta, gamma;
     double cos_ng, sin_ng, sin_ma, cos_ma;
 
-    compute_weight();
+    std::vector<double> weights = this->compute_weights();
 
     for(j1=0;j1<2*B;j1++)
     {
@@ -1290,12 +1285,12 @@ fdcl::FFTSO3_matrix_real fdcl::FFTSO3_real::forward_transform_0(std::function <d
                     for(m=-l;m<=l;m++)
                         for(n=-l;n<=l;n++)
                         {
-                            F_beta_theta[j1][j2](l,m,n)+=weight[k]*-Psi(l,-m,n)*f_j1kj2; 
-                            F_beta_psi[j1][j2](l,m,n)+=weight[k]*Psi(l,m,n)*f_j1kj2; 
+                            F_beta_theta[j1][j2](l,m,n)+=weights[k]*-Psi(l,-m,n)*f_j1kj2;
+                            F_beta_psi[j1][j2](l,m,n)+=weights[k]*Psi(l,m,n)*f_j1kj2;
                         }
             }
         }
-    }   
+    }
 
     for(j1=0;j1<2*B;j1++)
     {

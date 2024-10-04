@@ -156,15 +156,14 @@ class fdcl::FFTSO3_complex
 
 
 	protected:
-        std::vector<double> weight;
         std::vector<fdcl::FFTSO3_matrix_real> d_beta;
-        int B;  
+        int B;
         fdcl::FFTSO3_matrix_complex D, F, u;
         double beta_k(int k);
         double alpha_j(int j);
         double gamma_j(int j);
-        std::vector<double> compute_weight();
-        fdcl::FFTSO3_matrix_real wigner_d(double beta, int L);	
+        std::vector<double> compute_weights();
+        fdcl::FFTSO3_matrix_real wigner_d(double beta, int L);
         fdcl::FFTSO3_matrix_real wigner_d_explicit(double beta);
         fdcl::FFTSO3_matrix_complex wigner_D(double alpha, double beta, double gamma, int L);
         fdcl::FFTSO3_matrix_complex forward_transform(std::function <complex<double>(double, double, double)>, bool is_real);
