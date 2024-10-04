@@ -18,7 +18,7 @@ using std::min;
 
 #ifndef _IMAGINARY_UNIT
 #define _IMAGINARY_UNIT
-const complex<double> I(0.0,1.0);    
+const complex<double> I(0.0,1.0);
 #endif
 
 namespace fdcl
@@ -28,8 +28,8 @@ namespace fdcl
 
 /** \brief Matrix class for harmonic analysis on SO(3)
  *
- * This class formulates a matrix class for harmonic analysis on SO(3). 
- * Harmonics on SO(3) is indexed by three integer variables, namely \f$(l,m,n)\f$ for \f$ 0\leq l\f$ and \f$ -l\leq m,n \leq l\f$. 
+ * This class formulates a matrix class for harmonic analysis on SO(3).
+ * Harmonics on SO(3) is indexed by three integer variables, namely \f$(l,m,n)\f$ for \f$ 0\leq l\f$ and \f$ -l\leq m,n \leq l\f$.
  * This class supports the following indexing:
  *   - \f$ F^l_{m,n} \in\mathbb{C} \f$ is accessed by \c F(l,m,n)
  *   - \f$ F^l \in \mathbb{C}^{(2l+1)\times(2l+1)}\f$ is accessed by \c F[l]
@@ -64,8 +64,8 @@ public:
      * \sum_{l=0}^L \| F^l \|.
      * \f]
      */
-    double norm(); 
-	
+    double norm();
+
 	fdcl::FFTSO3_matrix<double> real(); /**< Return the real parts */
 
 	template<typename _ScalarType>
@@ -73,11 +73,12 @@ public:
 
 	fdcl::FFTSO3_matrix<complex<double>> operator+(fdcl::FFTSO3_matrix<complex<double>> const& M1); /**< Operator overloading for addition of two fdcl::FFTSO3_matrix objects */
 	fdcl::FFTSO3_matrix<ScalarType> operator+(fdcl::FFTSO3_matrix<double> const& M2); /**< Operator overloading for addition of two fdcl::FFTSO3_matrix objects with real types */
-	fdcl::FFTSO3_matrix<complex<double>> operator-(fdcl::FFTSO3_matrix<complex<double>> const& M1); /**< Operator overloading for subtraction */ 	
-	fdcl::FFTSO3_matrix<ScalarType> operator-(fdcl::FFTSO3_matrix<double> const& M2); /**< Operator overloading for subtraction */ 		
-    
-    fdcl::FFTSO3_matrix<complex<double>> operator*(const complex<double>& c);  /**< Operator overloading for multiplying a complex number to each element */	
-    fdcl::FFTSO3_matrix<ScalarType> operator*(const double& c);  /**< Operator overloading for multiplying a real number to each element */ 	
+	fdcl::FFTSO3_matrix<complex<double>> operator-(fdcl::FFTSO3_matrix<complex<double>> const& M1); /**< Operator overloading for subtraction */
+	fdcl::FFTSO3_matrix<ScalarType> operator-(fdcl::FFTSO3_matrix<double> const& M2); /**< Operator overloading for subtraction */
+
+    fdcl::FFTSO3_matrix<complex<double>> operator*(const complex<double>& c);  /**< Operator overloading for multiplying a complex number to each element */
+    fdcl::FFTSO3_matrix<ScalarType> operator*(const double& c);  /**< Operator overloading for multiplying a real number to each element */
+	fdcl::FFTSO3_matrix<ScalarType> operator%(const FFTSO3_matrix<ScalarType>& other) const;  /**< Operator overloading for element-wise multiplication of two fdcl::FFTSO3_matrix objects */
 
 private:
 	void assert_index(int l);
@@ -86,7 +87,7 @@ private:
 
 namespace fdcl
 {
-    typedef fdcl::FFTSO3_matrix<double> FFTSO3_matrix_real; /**< Template implementation of fdcl::FFTSO3_matrix for real elements */ 
+    typedef fdcl::FFTSO3_matrix<double> FFTSO3_matrix_real; /**< Template implementation of fdcl::FFTSO3_matrix for real elements */
     typedef fdcl::FFTSO3_matrix<complex<double>> FFTSO3_matrix_complex; /**< Template implemmentation of fdcl::FFTSO3_matrix for complex elements */
 }
 
