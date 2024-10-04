@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.5)
 project( fdcl_FFTSO3 C CXX )
 
-set(CMAKE_CXX_FLAGS "-O3 -Wall" )
+set(CMAKE_CXX_FLAGS "-O2 -Wno-deprecated-enum-enum-conversion" )
+# set(CMAKE_CXX_FLAGS "-O3 -Wall" )
 # set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra -pedantic")
 # set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
 
 ################################################################################
 # GLOBAL SETUP
 ################################################################################
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -47,7 +48,7 @@ include_directories(${PROJECT_SOURCE_DIR}/extern/eigen3)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 ## BUILD FFTSO3 LIBRARY
-set(FFTSO3_src 
+set(FFTSO3_src
     src/fdcl_FFTSO3.cpp
     src/fdcl_FFTS2.cpp
     src/fdcl_Clebsch_Gordon.cpp

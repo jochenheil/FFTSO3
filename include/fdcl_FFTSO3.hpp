@@ -154,6 +154,7 @@ class fdcl::FFTSO3_complex
          */
         double check_Clebsch_Gordon();
 
+        void generate_euler_angles(const int B, std::vector<double> & alpha, std::vector<double> & beta, std::vector<double> & gamma);
 
 	protected:
         std::vector<fdcl::FFTSO3_matrix_real> d_beta;
