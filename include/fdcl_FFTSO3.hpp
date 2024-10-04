@@ -21,22 +21,22 @@ namespace fdcl
 
 /** \brief Complex Fast Fourier Transform on SO(3)
  *
- * This class provides various tools for complex harmonic analysis on the speical orthogonal group, includeing fast Forward transform, inverse transform, wigner-D function, wigner-d function, and Clebsch-Gordon coefficient. 
+ * This class provides various tools for complex harmonic analysis on the speical orthogonal group, includeing fast Forward transform, inverse transform, wigner-D function, wigner-d function, and Clebsch-Gordon coefficient.
  *
  */
 class fdcl::FFTSO3_complex
 {
     public:
-        /** \brief The maximum order of the Fourier tranform that is applied to all of the member functions. 
+        /** \brief The maximum order of the Fourier tranform that is applied to all of the member functions.
          *
          * For example, the forward trasnform is computed upto \f$l\leq l_{\max}\f$, i.e., \f$ F^{l}_{m,n} =0 \mbox{ for } l> l_{\max} \f$. Thhis can be set by the constructor, or fdcl::FFTSO3_complex::init(int l_max).
          */
-        int l_max; 
+        int l_max;
         /** \brief fdcl::Clebsch_Gordon_complex class object
          *
          * Class instance for Clebsch-Gordon coefficients, which are computed by fdcl::Clebsch_Gordon_complex::compute(int l1, int l2). Then, the coefficient \f$ C^{l,m}_{l_1,m_1,l_2,m_2}\f$ is accessed by \c C(l,m,l1,m1,l2,m2).
          */
-        fdcl::Clebsch_Gordon_complex C; 
+        fdcl::Clebsch_Gordon_complex C;
 
         FFTSO3_complex(){};
         /** Constructor with \f$ l_{\max} \f$
@@ -49,20 +49,20 @@ class fdcl::FFTSO3_complex
 
         /** wigner-d matrix
          *
-         * Compute and returns a fdcl::FFTSO3_matrix_real object for real-valued wigner-d matrix, namely \f$ d^l_{m,n}(\beta) \f$. 
+         * Compute and returns a fdcl::FFTSO3_matrix_real object for real-valued wigner-d matrix, namely \f$ d^l_{m,n}(\beta) \f$.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\tims (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_real wigner_d(double beta);
 
         /** wigner-D matrix for a given rotation matrix
          *
-         * Compute and returns a fdcl::FFTSO3_matrix_complex object for complex-valued wigner-D matrix, namely \f$ D^l_{m,n}(R) \f$. 
+         * Compute and returns a fdcl::FFTSO3_matrix_complex object for complex-valued wigner-D matrix, namely \f$ D^l_{m,n}(R) \f$.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
-        fdcl::FFTSO3_matrix_complex wigner_D(Eigen::Matrix3d);	
+        fdcl::FFTSO3_matrix_complex wigner_D(Eigen::Matrix3d);
         /** wigner-D matrix for a given 3-2-3 Euler angles
          *
-         * Compute and return a fdcl::FFTSO3_matrix_complex object for complex-valued wigner-D matrix, namely \f$ D^l_{m,n}(\alpha,\beta,\gamma) \f$. 
+         * Compute and return a fdcl::FFTSO3_matrix_complex object for complex-valued wigner-D matrix, namely \f$ D^l_{m,n}(\alpha,\beta,\gamma) \f$.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_complex wigner_D(double alpha, double beta, double gamma);
@@ -70,7 +70,7 @@ class fdcl::FFTSO3_complex
         /** Forward transform for \f$ f(\alpha,\beta,\gamma)\f$
          *
          * Compute and return a fdcl::FFTSO3_matrix_complex object for complex Fourier transform of \f$ f(\alpha,\beta,\gamma)):\mathrm{SO(3)}\rightarrow \mathbb{C} \f$, namely \f$ F^l_{m,n} \f$.
-         * The function is defined in terms of 3-2-3 Euler angles. 
+         * The function is defined in terms of 3-2-3 Euler angles.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_complex forward_transform(std::function <complex<double>(double, double, double)>);
@@ -78,7 +78,7 @@ class fdcl::FFTSO3_complex
         /** Forward transform for \f$ f(R)\f$
          *
          * Compute and return a fdcl::FFTSO3_matrix_complex object for complex Fourier transform of \f$ f(R):\mathrm{SO(3)}\rightarrow \mathbb{C} \f$, namely \f$ F^l_{m,n} \f$.
-         * The function is defined in terms of a rotation matrix. 
+         * The function is defined in terms of a rotation matrix.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_complex forward_transform(std::function <complex<double>(Eigen::Matrix3d)>);
@@ -98,27 +98,27 @@ class fdcl::FFTSO3_complex
         /** Derivaties of wigner-D matrix
          *
          * Compute and return the derivatives of the wigner-D matrix at the identity along the canonial basis.
-         * More specifically, let the output object be \c u. 
-         * Then \c u[1], \c u[2], and \c u[3] correspond to \f$ u^l(e_1) \f$, \f$u^l(e_2)\f$, and \f$u^l(e_3)\f$, respectively. 
+         * More specifically, let the output object be \c u.
+         * Then \c u[1], \c u[2], and \c u[3] correspond to \f$ u^l(e_1) \f$, \f$u^l(e_2)\f$, and \f$u^l(e_3)\f$, respectively.
          * Note \c u[0] is set to zero.
          */
         std::vector<fdcl::FFTSO3_matrix_complex> deriv_wigner_D();
 
-        /** Character 
+        /** Character
          *
-         * Compute and return the character \f$\chi(\beta)\f$. 
+         * Compute and return the character \f$\chi(\beta)\f$.
          */
         std::vector<double> character(double beta);
 
         /**  When set to \c true, the detailed results of check functions are printed. */
-        bool check_verbose=false;         
+        bool check_verbose=false;
 
         /** Execute all of check functions */
         void check_all();
 
-        /** Check the properties of the weight used in fast Fourier transform 
+        /** Check the properties of the weight used in fast Fourier transform
          *
-         * Verify the following two properties of \f$ w_k\f$. 
+         * Verify the following two properties of \f$ w_k\f$.
          * \f{align*}{
             \sum_k w_k d^l_{0,0}(\beta_k) 4B^2 & = \delta_{0,l},\\
             \sum_{j_1,k,j_2} w_k D(\alpha_{j_1}, \beta_k, \gamma_{j_2}) & = \delta_{l,0}\delta_{m,0}\delta_{n,0}
@@ -138,13 +138,13 @@ class fdcl::FFTSO3_complex
          */
         double check_deriv_wigner_D();
 
-        /** Check the forward transform and the inverse transform. 
+        /** Check the forward transform and the inverse transform.
          *
-         * Verify that the composition of the inverse transform and the foward transform yield the identify map in the space of Fourier parameters. 
-         * More specifically, a function is defined as the form of the inverse trasnform with random Fourier parameters, and check if its Fourier transform yields the same Fourier parameters. 
+         * Verify that the composition of the inverse transform and the foward transform yield the identify map in the space of Fourier parameters.
+         * More specifically, a function is defined as the form of the inverse trasnform with random Fourier parameters, and check if its Fourier transform yields the same Fourier parameters.
          */
         double check_transform();
-        
+
         /** Check the Clebsh-Gordon coefficients, computed by fdcl::Clebsch_Gordon_complex::compute()
          *
          * Verify the followign property:
@@ -177,7 +177,7 @@ class fdcl::FFTSO3_complex
 
 /** \brief Real Fast Fourier Transform on SO(3)
  *
- * This class provides various tools for real harmonic analysis on the speical orthogonal group, includeing fast Forward transform, inverse transform, wigner-D function, wigner-d function, and Clebsch-Gordon coefficient. 
+ * This class provides various tools for real harmonic analysis on the speical orthogonal group, includeing fast Forward transform, inverse transform, wigner-D function, wigner-d function, and Clebsch-Gordon coefficient.
  *
  */
 class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
@@ -196,19 +196,19 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
         ~FFTSO3_real(){};
 
         /** Initialize the class with the maximum order specificed by \c l_max.
-        */ 
+        */
         void init(int l_max);
 
         /** real harmonics on SO(3) for given 3-2-3 Euler angles
          *
-         * Compute and returns a fdcl::FFTSO3_matrix_real object for real harmonics on SO(3), namely \f$ U^l_{m,n}(R) \f$. 
+         * Compute and returns a fdcl::FFTSO3_matrix_real object for real harmonics on SO(3), namely \f$ U^l_{m,n}(R) \f$.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_real real_harmonics(double alpha, double beta, double gamma);
 
         /** real harmonics on SO(3) for a given rotation matrix
          *
-         * Compute and returns a fdcl::FFTSO3_matrix_real object for real harmonics on SO(3), namely \f$ U^l_{m,n}(\alpha,\beta,\gamma) \f$. 
+         * Compute and returns a fdcl::FFTSO3_matrix_real object for real harmonics on SO(3), namely \f$ U^l_{m,n}(\alpha,\beta,\gamma) \f$.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_real real_harmonics(Eigen::Matrix3d);
@@ -216,8 +216,8 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
         /** Derivaties of wigner-D matrix
          *
          * Compute and return the derivatives of the real harmonics at the identity along the canonial basis.
-         * More specifically, let the output object be \c u. 
-         * Then \c u[1], \c u[2], and \c u[3] correspond to \f$ u^l(e_1) \f$, \f$u^l(e_2)\f$, and \f$u^l(e_3)\f$, respectively. 
+         * More specifically, let the output object be \c u.
+         * Then \c u[1], \c u[2], and \c u[3] correspond to \f$ u^l(e_1) \f$, \f$u^l(e_2)\f$, and \f$u^l(e_3)\f$, respectively.
          * Note \c u[0] is set to zero.
          */
         std::vector<fdcl::FFTSO3_matrix_real> deriv_real_harmonics();
@@ -225,7 +225,7 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
         /** Forward transform for \f$ f(\alpha,\beta,\gamma)\f$
          *
          * Compute and return a fdcl::FFTSO3_matrix_real object for real Fourier transform of \f$ f(\alpha,\beta,\gamma)):\mathrm{SO(3)}\rightarrow \mathbb{C} \f$, namely \f$ F^l_{m,n} \f$.
-         * The function is defined in terms of 3-2-3 Euler angles. 
+         * The function is defined in terms of 3-2-3 Euler angles.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_real forward_transform(std::function <double(double, double, double)>);
@@ -233,7 +233,7 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
         /** Forward transform for \f$ f(R)\f$
          *
          * Compute and return a fdcl::FFTSO3_matrix_real object for real Fourier transform of \f$ f(R):\mathrm{SO(3)}\rightarrow \mathbb{C} \f$, namely \f$ F^l_{m,n} \f$.
-         * The function is defined in terms of a rotation matrix. 
+         * The function is defined in terms of a rotation matrix.
          * Each element can be accesed by the index  \c (l,m,n) of the returned object, or the \f$ (2l+1)\times (2l+1)\f$ matrix for the \f$l\f$-th order is accessed by \c [l].
          */
         fdcl::FFTSO3_matrix_real forward_transform(std::function <double(Eigen::Matrix3d)>);
@@ -274,10 +274,10 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
          */
         double check_deriv_real_harmonics();
 
-        /** Check the forward transform and the inverse transform. 
+        /** Check the forward transform and the inverse transform.
          *
-         * Verify that the composition of the inverse transform and the foward transform yield the identify map in the space of Fourier parameters. 
-         * More specifically, a function is defined as the form of the inverse trasnform with random Fourier parameters, and check if its Fourier transform yields the same Fourier parameters. 
+         * Verify that the composition of the inverse transform and the foward transform yield the identify map in the space of Fourier parameters.
+         * More specifically, a function is defined as the form of the inverse trasnform with random Fourier parameters, and check if its Fourier transform yields the same Fourier parameters.
          */
         double check_transform();
 
@@ -298,7 +298,7 @@ class fdcl::FFTSO3_real : public fdcl::FFTSO3_complex
         fdcl::FFTSO3_matrix_real forward_transform_1(std::function <double(double, double, double)>);
         fdcl::FFTSO3_matrix_real forward_transform_2(std::function <double(double, double, double)>);
 
-        std::vector<double> compute_Phi(int m, int n, double alpha, double gamma);	
+        std::vector<double> compute_Phi(int m, int n, double alpha, double gamma);
         fdcl::FFTSO3_matrix_real compute_Psi(double beta, int L);
         void compute_X(double gamma, int L, Eigen::MatrixXd& X);
 
